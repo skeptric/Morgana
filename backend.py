@@ -23,7 +23,7 @@ with open('attributes.csv') as f:
 var_attr_name = defaultdict(dict)
 for row in attributes:
     variable = row['variable']
-    name = row['name']
+    name = row['shortname']
     # Hack to deal with pandas type conversion
     try:
         attribute = float(row['value'])
