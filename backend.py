@@ -38,7 +38,7 @@ var_attr_name = dict(var_attr_name)
 cols = filter_categorical_cols(data)
 cols = [col for col in cols if col in var_attr_name]
 cols = sort_cols(data, cols)
-data = data[cols]
+data = data[['id'] + cols]
 
 
 try:
@@ -88,6 +88,22 @@ def sunburst(cols=cols):
             pickle.dump(sun_memo, f)
     j = sun_memo[tuple(cols)]
     return jsonify(j)
+
+
+@app.route("/api/patient", methods=['GET', 'POST'])
+def patient():
+    selector = request.get_json(force=True)
+    out_data = data[['id'] + list(selector.keys())]
+
+    for var, val in selector.items():
+        if val != "*":
+            out_data = out_data[out_data[var] == val]
+    with open('data.csv', 'w') as f:
+        out_data.to_csv(f)
+
+    # return jsonify(out_data)
+    return jsonify({'url': 'http://localhost:8000/data.csv'})
+
 
 if __name__ == "__main__":
     app.run()
