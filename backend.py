@@ -93,11 +93,11 @@ def sunburst(cols=cols):
 @app.route("/api/patient", methods=['GET', 'POST'])
 def patient():
     selector = request.get_json(force=True)
-    out_data = data[['id'] + data.columns]
+    out_data = data[['id'] + selector.keys())]
 
     for var, val in selector.items():
         if val != "*":
-            out_data = out_data[out_data[var] == val]
+            out_data=out_data[out_data[var] == val]
     with open('data.csv', 'w') as f:
         out_data.to_csv(f)
 
